@@ -376,7 +376,8 @@
 
 .gallery-wrapper {
     position: relative;
-    overflow: hidden; /* скрываем ползунок */
+    overflow: hidden;
+    touch-action: pan-y;
 }
 
 .gallery-track {
@@ -384,6 +385,7 @@
     gap: 20px;
     padding: 20px;
     transition: transform 0.4s ease;
+    touch-action: pan-y;
 }
 
 .gallery-track img {
@@ -467,6 +469,8 @@ const prev = document.querySelector('.prev');
 
 let index = 0;
 
+/* ====== ОБЫЧНАЯ ГАЛЕРЕЯ ====== */
+
 function updateGallery() {
     const imageWidth = images[0].offsetWidth + 20;
     track.style.transform = `translateX(-${index * imageWidth}px)`;
@@ -484,7 +488,36 @@ prev.addEventListener('click', () => {
     updateGallery();
 });
 
-/* Lightbox */
+/* СВАЙП НА СТРАНИЦЕ */
+let startX = 0;
+let endX = 0;
+
+track.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+});
+
+track.addEventListener('touchend', e => {
+    endX = e.changedTouches[0].clientX;
+    handleSwipe();
+});
+
+function handleSwipe() {
+    const diff = startX - endX;
+
+    if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+            index++;
+            if (index >= images.length) index = 0;
+        } else {
+            index--;
+            if (index < 0) index = images.length - 1;
+        }
+        updateGallery();
+    }
+}
+
+/* ====== LIGHTBOX ====== */
+
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.querySelector('.lightbox-img');
 const closeBtn = document.querySelector('.close');
@@ -507,21 +540,42 @@ images.forEach((img, i) => {
     });
 });
 
-lightboxNext.addEventListener('click', (e) => {
+lightboxNext.addEventListener('click', e => {
     e.stopPropagation();
     showImage(currentImageIndex + 1);
 });
 
-lightboxPrev.addEventListener('click', (e) => {
+lightboxPrev.addEventListener('click', e => {
     e.stopPropagation();
     showImage(currentImageIndex - 1);
+});
+
+/* СВАЙП В LIGHTBOX */
+let lbStartX = 0;
+let lbEndX = 0;
+
+lightbox.addEventListener('touchstart', e => {
+    lbStartX = e.touches[0].clientX;
+});
+
+lightbox.addEventListener('touchend', e => {
+    lbEndX = e.changedTouches[0].clientX;
+    const diff = lbStartX - lbEndX;
+
+    if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+            showImage(currentImageIndex + 1);
+        } else {
+            showImage(currentImageIndex - 1);
+        }
+    }
 });
 
 closeBtn.addEventListener('click', () => {
     lightbox.style.display = 'none';
 });
 
-lightbox.addEventListener('click', (e) => {
+lightbox.addEventListener('click', e => {
     if (e.target === lightbox) {
         lightbox.style.display = 'none';
     }
