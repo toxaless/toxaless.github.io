@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>ssssvoboda</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <link rel="icon" type="image/png" href="title.jpg">
     <style>
         * {
             margin: 0;
@@ -25,7 +25,7 @@
         .hero {
             height: 100vh;
             padding-top: 80px;
-            background: url('fon.png') center center / cover no-repeat;
+            background: url('fon.jpg') center center / cover no-repeat;
             position: relative;
             display: flex;
             align-items: center;
@@ -189,6 +189,60 @@
             transform: scale(1.1);
         }
 
+        /* Стили для элемента "Смотреть все" */
+        .gallery-item.show-all {
+            position: relative;
+        }
+
+        .gallery-item.show-all img {
+            filter: blur(5px);
+            transition: filter 0.3s ease;
+        }
+
+        .gallery-item.show-all:hover img {
+            filter: blur(3px);
+        }
+
+        .show-all-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .show-all-overlay span {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .show-all-overlay p {
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .show-all-overlay span {
+                font-size: 36px;
+            }
+            
+            .show-all-overlay p {
+                font-size: 14px;
+            }
+        }
+
         /* Лайтбокс */
         .lightbox {
             display: none;
@@ -311,18 +365,6 @@
             z-index: 10001;
         }
 
-        /* Индикатор свайпа (для мобильных) */
-        .swipe-hint {
-            position: absolute;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 14px;
-            display: none;
-            z-index: 10001;
-        }
-
         @media (max-width: 768px) {
             .lightbox-image-container {
                 padding: 20px;
@@ -348,10 +390,6 @@
                 width: 45px;
                 height: 45px;
                 font-size: 26px;
-            }
-            
-            .swipe-hint {
-                display: block;
             }
         }
 
@@ -512,12 +550,12 @@
     </style>
 </section>
 
-<!-- НОВАЯ ГАЛЕРЕЯ -->
+<!-- ГАЛЕРЕЯ -->
 <section id="gallery">
     <h2>Галерея</h2>
     <div class="gallery-container">
-        <div class="gallery-grid">
-            <!-- Здесь будут картинки -->
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- Галерея будет заполнена через JavaScript -->
         </div>
     </div>
 </section>
@@ -534,7 +572,6 @@
         </div>
         
         <div class="lightbox-counter" id="lightboxCounter"></div>
-        <div class="swipe-hint">👆 Листайте влево/вправо</div>
     </div>
 </div>
 
@@ -588,8 +625,8 @@
 
 <!-- JS -->
 <script>
-    // Массив с изображениями (добавьте свои пути)
-    const galleryImages = [
+    // ВСЕ изображения (полный список)
+    const allGalleryImages = [
         'gallery/pic1.jpg',
         'gallery/pic2.jpg',
         'gallery/pic3.jpg',
@@ -597,19 +634,37 @@
         'gallery/pic5.webp',
         'gallery/pic6.jpeg',
         'gallery/pic7.jpeg',
-        'gallery/pic8.jpg'
+        'gallery/pic8.jpg',
+        'gallery/pic9.jpg',
     ];
 
+    // Первые 5 изображений для превью
+    const previewImages = allGalleryImages.slice(0, 6);
+
     // Создание сетки галереи
-    const galleryGrid = document.querySelector('.gallery-grid');
-    
-    galleryImages.forEach((src, index) => {
+    const galleryGrid = document.getElementById('galleryGrid');
+
+    // Добавляем первые 5 фото
+    previewImages.forEach((src, index) => {
         const item = document.createElement('div');
         item.className = 'gallery-item';
         item.innerHTML = `<img src="${src}" alt="Gallery image ${index + 1}" loading="lazy">`;
         item.addEventListener('click', () => openLightbox(index));
         galleryGrid.appendChild(item);
     });
+
+    // Добавляем специальный элемент "Смотреть все"
+    const showAllItem = document.createElement('div');
+    showAllItem.className = 'gallery-item show-all';
+    showAllItem.innerHTML = `
+        <img src="${allGalleryImages[6]}" alt="Show all" style="filter: blur(5px);">
+        <div class="show-all-overlay">
+            <span>+${allGalleryImages.length - 6}</span>
+            <p>смотреть все</p>
+        </div>
+    `;
+    showAllItem.addEventListener('click', () => openLightbox(0));
+    galleryGrid.appendChild(showAllItem);
 
     // Элементы лайтбокса
     const lightbox = document.getElementById('lightbox');
@@ -642,11 +697,11 @@
         }, 300);
     }
 
-    // Обновление изображения в лайтбоксе
+    // Обновление изображения в лайтбоксе (используем ВСЕ изображения)
     function updateLightboxImage() {
-        lightboxImage.src = galleryImages[currentIndex];
+        lightboxImage.src = allGalleryImages[currentIndex];
         lightboxImage.alt = `Image ${currentIndex + 1}`;
-        lightboxCounter.textContent = `${currentIndex + 1} / ${galleryImages.length}`;
+        lightboxCounter.textContent = `${currentIndex + 1} / ${allGalleryImages.length}`;
         lightboxImage.style.transform = 'translateX(0)';
     }
 
@@ -660,7 +715,7 @@
 
     // Переключение на следующее изображение
     function nextImage() {
-        if (currentIndex < galleryImages.length - 1) {
+        if (currentIndex < allGalleryImages.length - 1) {
             currentIndex++;
             updateLightboxImage();
         }
@@ -713,7 +768,7 @@
         currentTranslate = diff;
         
         // Ограничиваем перетаскивание на границах
-        if ((currentIndex === 0 && diff > 0) || (currentIndex === galleryImages.length - 1 && diff < 0)) {
+        if ((currentIndex === 0 && diff > 0) || (currentIndex === allGalleryImages.length - 1 && diff < 0)) {
             lightboxImage.style.transform = `translateX(${diff * 0.3}px)`;
         } else {
             lightboxImage.style.transform = `translateX(${diff}px)`;
@@ -729,7 +784,7 @@
         
         const threshold = 100;
         
-        if (currentTranslate < -threshold && currentIndex < galleryImages.length - 1) {
+        if (currentTranslate < -threshold && currentIndex < allGalleryImages.length - 1) {
             // Свайп влево - следующее фото
             nextImage();
         } else if (currentTranslate > threshold && currentIndex > 0) {
@@ -752,7 +807,6 @@
 
     // Инициализация hero
     window.onload = function() {
-        window.scrollTo(0, 0);
         document.querySelector('.hero').classList.add('loaded');
     };
 
