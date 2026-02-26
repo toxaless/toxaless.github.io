@@ -24,7 +24,7 @@
 
         .hero {
             height: 100vh;
-            padding-top: 80px; /* примерно высота панели */
+            padding-top: 80px;
             background: url('fon.png') center center / cover no-repeat;
             position: relative;
             display: flex;
@@ -48,16 +48,16 @@
         }
 
         nav {
-            position: fixed; /* фиксируем навигацию */
-            top: 0;          /* сверху страницы */
+            position: fixed;
+            top: 0;
             left: 0;
             width: 100%;
             display: flex;
             justify-content: center;
             gap: 50px;
-            z-index: 999;    /* чтобы была выше всего */
-            padding: 20px 0; /* немного отступа сверху и снизу */
-            background: rgba(0, 0, 0, 0.8); /* полупрозрачный фон для читаемости */
+            z-index: 999;
+            padding: 20px 0;
+            background: rgba(0, 0, 0, 0.8);
             opacity: 0;
             transform: translateY(-20px);
             transition: opacity 1s ease 0.8s, transform 1s ease 0.8s;
@@ -101,7 +101,7 @@
 
         section {
             min-height: 100vh;
-            padding: 120px 10% 0 10%; /* сверху 120px уже учитывает фикс. панель */
+            padding: 120px 10% 0 10%;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -116,19 +116,6 @@
         #playlists { background: #181818; }
         #gallery { background: #111; }
         #contact { background: #181818; }
-
-        /* GRID */
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .grid div {
-            background: #333;
-            height: 200px;
-        }
 
         /* CONTACT */
 
@@ -161,6 +148,223 @@
             }
         }
 
+        /* ===== НОВАЯ ГАЛЕРЕЯ ===== */
+
+        .gallery-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        /* Сетка превью */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1/1;
+            overflow: hidden;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Лайтбокс */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-image-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .lightbox-image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            user-select: none;
+            transition: transform 0.3s ease;
+        }
+
+        /* Навигационные кнопки */
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+            transition: all 0.3s ease;
+            z-index: 10001;
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .lightbox-nav.prev {
+            left: 30px;
+        }
+
+        .lightbox-nav.next {
+            right: 30px;
+        }
+
+        /* Кнопка закрытия */
+        .lightbox-close {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+            transition: all 0.3s ease;
+            z-index: 10001;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        /* Счетчик изображений */
+        .lightbox-counter {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 16px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10001;
+        }
+
+        /* Индикатор свайпа (для мобильных) */
+        .swipe-hint {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            display: none;
+            z-index: 10001;
+        }
+
+        @media (max-width: 768px) {
+            .lightbox-image-container {
+                padding: 20px;
+            }
+            
+            .lightbox-nav {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+            
+            .lightbox-nav.prev {
+                left: 15px;
+            }
+            
+            .lightbox-nav.next {
+                right: 15px;
+            }
+            
+            .lightbox-close {
+                top: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 26px;
+            }
+            
+            .swipe-hint {
+                display: block;
+            }
+        }
+
+        /* Анимация перетаскивания */
+        .lightbox-image-container.dragging img {
+            transition: none;
+            cursor: grabbing;
+        }
+
+        /* Затемнение фона при закрытии */
+        .lightbox.closing {
+            opacity: 0;
+        }
     </style>
 </head>
 <body>
@@ -173,7 +377,6 @@
         <a href="#gallery">Галерея</a>
         <a href="#contact">Контакты</a>
     </nav>
-
     <div class="title">ssssvoboda</div>
 </div>
 
@@ -186,28 +389,16 @@
 <!-- PLAYLISTS -->
 <section id="playlists">
     <h2 style="font-size:42px; margin-bottom:15px;">Плейлисты</h2>
-    <p style="
-        color: #ddd;
-        font-size: 22px;
-        font-weight: 600;
-        margin-bottom:40px;
-        letter-spacing: 1px;
-    ">Последний микс - SDVG12</p>
+    <p style="color: #ddd; font-size: 22px; font-weight: 600; margin-bottom:40px; letter-spacing: 1px;">Последний микс - SDVG12</p>
 
     <div class="accordion-container" style="max-width:900px; display:flex; flex-direction:column; gap:20px;">
-
         <!-- Spotify -->
         <div class="playlist-block">
             <div class="playlist-header">
                 Spotify <span class="arrow">&#9660;</span>
             </div>
             <div class="playlist-content" style="max-height:0px;">
-                <iframe class="playlist-widget"
-                    src="https://open.spotify.com/embed/playlist/6aX9Y8JoMo8hIAQckYqHVX?utm_source=generator"
-                    frameborder="0"
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                    loading="lazy">
-                </iframe>
+                <iframe class="playlist-widget" src="https://open.spotify.com/embed/playlist/6aX9Y8JoMo8hIAQckYqHVX?utm_source=generator" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
             </div>
         </div>
 
@@ -217,11 +408,7 @@
                 Яндекс Музыка <span class="arrow">&#9654;</span>
             </div>
             <div class="playlist-content" style="max-height:0;">
-                <iframe class="playlist-widget"
-                    frameborder="0"
-                    allow="clipboard-write"
-                    src="https://music.yandex.ru/iframe/playlist/music-blog/2616">
-                </iframe>
+                <iframe class="playlist-widget" frameborder="0" allow="clipboard-write" src="https://music.yandex.ru/iframe/playlist/music-blog/2616"></iframe>
             </div>
         </div>
 
@@ -234,21 +421,11 @@
                 <div id="vk_playlist_-147845620_3248" class="playlist-widget"></div>
             </div>
         </div>
-
     </div>
 
     <!-- Ссылка внизу -->
     <div style="margin-top:25px;">
-        <a href="playlists.html" style="
-            color: #fff;
-            text-decoration: underline;
-            font-weight: 600;
-            font-size: 18px;
-            letter-spacing: 1px;
-            transition: 0.3s;
-        " onmouseover="this.style.opacity='0.7';" onmouseout="this.style.opacity='1';">
-            Все плейлисты
-        </a>
+        <a href="playlists.html" style="color: #fff; text-decoration: underline; font-weight: 600; font-size: 18px; letter-spacing: 1px; transition: 0.3s;" onmouseover="this.style.opacity='0.7';" onmouseout="this.style.opacity='1';">Все плейлисты</a>
     </div>
 
     <!-- VK API -->
@@ -276,7 +453,6 @@
             });
         });
 
-        // Раскрываем первый блок Spotify после полной загрузки
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const firstContent = document.querySelector('.playlist-block:first-child .playlist-content');
@@ -328,9 +504,6 @@
             .playlist-header {
                 font-size: 18px;
             }
-            p {
-                font-size: 20px;
-            }
         }
 
         .arrow {
@@ -339,339 +512,31 @@
     </style>
 </section>
 
-<!-- GALLERY -->
+<!-- НОВАЯ ГАЛЕРЕЯ -->
 <section id="gallery">
     <h2>Галерея</h2>
-
-    <div class="gallery-wrapper">
-        <button class="nav prev">&#10094;</button>
-
-        <div class="gallery-track">
-            <img src="gallery/pic1.jpg" alt="Фото 1">
-            <img src="gallery/pic2.jpg" alt="Фото 2">
-            <img src="gallery/pic3.jpg" alt="Фото 3">
-            <img src="gallery/pic4.jpg" alt="Фото 4">
-            <img src="gallery/pic5.webp" alt="Фото 5">
-            <img src="gallery/pic6.jpeg" alt="Фото 6">
-            <img src="gallery/pic7.jpeg" alt="Фото 7">
-            <img src="gallery/pic8.jpg" alt="Фото 8">
+    <div class="gallery-container">
+        <div class="gallery-grid">
+            <!-- Здесь будут картинки -->
         </div>
-
-        <button class="nav next">&#10095;</button>
     </div>
 </section>
 
-<!-- FULLSCREEN VIEW -->
-<div id="lightbox">
-    <button class="lightbox-nav lightbox-prev">&#10094;</button>
-    <img class="lightbox-img">
-    <button class="lightbox-nav lightbox-next">&#10095;</button>
-    <span class="close">&times;</span>
+<!-- ЛАЙТБОКС -->
+<div class="lightbox" id="lightbox">
+    <div class="lightbox-content">
+        <button class="lightbox-nav prev" id="lightboxPrev">&#10094;</button>
+        <button class="lightbox-nav next" id="lightboxNext">&#10095;</button>
+        <button class="lightbox-close" id="lightboxClose">&times;</button>
+        
+        <div class="lightbox-image-container" id="lightboxImageContainer">
+            <img src="" alt="" id="lightboxImage">
+        </div>
+        
+        <div class="lightbox-counter" id="lightboxCounter"></div>
+        <div class="swipe-hint">👆 Листайте влево/вправо</div>
+    </div>
 </div>
-
-<style>
-
-
-.gallery-wrapper {
-    position: relative;
-    overflow: hidden;
-}
-
-.gallery-track {
-    display: flex;
-    gap: 20px;
-    padding: 20px;
-    transition: transform 0.3s ease;
-    cursor: grab;
-    user-select: none;
-}
-
-.gallery-track:active {
-    cursor: grabbing;
-}
-
-/* Тонкий тёмный скроллбар (если включится нативный) */
-.gallery-track::-webkit-scrollbar {
-    height: 6px;
-}
-.gallery-track::-webkit-scrollbar-track {
-    background: transparent;
-}
-.gallery-track::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.5);
-    border-radius: 10px;
-}
-
-.gallery-track img {
-    max-height: 400px;
-    width: auto; /* без обрезки */
-    cursor: pointer;
-    border-radius: 10px;
-    flex-shrink: 0;
-}
-
-/* Кнопки */
-.nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.5);
-    color: white;
-    border: none;
-    font-size: 30px;
-    cursor: pointer;
-    padding: 10px 15px;
-    border-radius: 50%;
-    z-index: 2;
-}
-
-.prev { left: 10px; }
-.next { right: 10px; }
-
-/* Lightbox */
-#lightbox {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.9);
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
-
-.lightbox-img {
-    max-width: 95%;
-    max-height: 95%;
-    transition: transform 0.3s ease;
-}
-
-.lightbox-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.041);
-    border: none;
-    color: white;
-    font-size: 50px;
-    cursor: pointer;
-    padding: 10px 20px;
-    border-radius: 50%;
-    z-index: 10000;
-}
-
-.lightbox-prev { left: 30px; }
-.lightbox-next { right: 30px; }
-
-.lightbox-nav:hover {
-    background: rgba(255,255,255,0.4);
-}
-
-.close {
-    position: absolute;
-    top: 20px;
-    right: 40px;
-    font-size: 50px;
-    color: white;
-    cursor: pointer;
-}
-</style>
-
-<script>
-const track = document.querySelector('.gallery-track');
-const images = document.querySelectorAll('.gallery-track img');
-const next = document.querySelector('.next');
-const prev = document.querySelector('.prev');
-
-let index = 0;
-let isDragging = false;
-let startX = 0;
-let currentTranslate = 0;
-let prevTranslate = 0;
-let animationID;
-
-/* ===== ОБНОВЛЕНИЕ ПОЗИЦИИ ===== */
-
-function updateGallery() {
-    const imageWidth = images[0].offsetWidth + 20;
-    currentTranslate = -index * imageWidth;
-    prevTranslate = currentTranslate;
-    track.style.transition = "transform 0.3s ease";
-    track.style.transform = `translateX(${currentTranslate}px)`;
-}
-
-/* ===== СТРЕЛКИ ===== */
-
-next.addEventListener('click', () => {
-    if (index < images.length - 1) {
-        index++;
-        updateGallery();
-    } else {
-        // Если достигнут конец, слегка встряхиваем или просто не даем уйти дальше
-        track.style.transition = "transform 0.1s ease";
-        track.style.transform = `translateX(${currentTranslate - 20}px)`;
-        setTimeout(() => {
-            track.style.transition = "transform 0.3s ease";
-            track.style.transform = `translateX(${currentTranslate}px)`;
-        }, 100);
-    }
-});
-
-prev.addEventListener('click', () => {
-    if (index > 0) {
-        index--;
-        updateGallery();
-    } else {
-        // Если достигнуто начало, слегка встряхиваем
-        track.style.transition = "transform 0.1s ease";
-        track.style.transform = `translateX(${currentTranslate + 20}px)`;
-        setTimeout(() => {
-            track.style.transition = "transform 0.3s ease";
-            track.style.transform = `translateX(${currentTranslate}px)`;
-        }, 100);
-    }
-});
-
-/* ===== DRAG / SWIPE ===== */
-
-track.addEventListener('pointerdown', startDrag);
-track.addEventListener('pointermove', drag);
-track.addEventListener('pointerup', endDrag);
-track.addEventListener('pointerleave', endDrag);
-
-function startDrag(e) {
-    isDragging = true;
-    startX = e.clientX;
-    track.style.transition = "none";
-}
-
-function drag(e) {
-    if (!isDragging) return;
-    const currentPosition = e.clientX;
-    const diff = currentPosition - startX;
-    
-    // Добавляем сопротивление на границах
-    const maxDrag = 100;
-    let limitedDiff = diff;
-    
-    if ((index === 0 && diff > 0) || (index === images.length - 1 && diff < 0)) {
-        limitedDiff = diff / 3; // Сопротивление на границах
-    }
-    
-    currentTranslate = prevTranslate + limitedDiff;
-    track.style.transform = `translateX(${currentTranslate}px)`;
-}
-
-function endDrag(e) {
-    if (!isDragging) return;
-    isDragging = false;
-
-    const movedBy = currentTranslate - prevTranslate;
-    const threshold = 50;
-
-    // Проверяем, можно ли переключить
-    if (movedBy < -threshold && index < images.length - 1) {
-        index++;
-    } else if (movedBy > threshold && index > 0) {
-        index--;
-    }
-
-    updateGallery();
-}
-
-/* ===== LIGHTBOX ===== */
-
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = document.querySelector('.lightbox-img');
-const closeBtn = document.querySelector('.close');
-const lightboxPrev = document.querySelector('.lightbox-prev');
-const lightboxNext = document.querySelector('.lightbox-next');
-
-let currentImageIndex = 0;
-
-function showImage(i) {
-    if (i >= images.length) i = images.length - 1;
-    if (i < 0) i = 0;
-    currentImageIndex = i;
-    lightboxImg.src = images[currentImageIndex].src;
-}
-
-images.forEach((img, i) => {
-    img.addEventListener('click', () => {
-        lightbox.style.display = 'flex';
-        showImage(i);
-    });
-});
-
-lightboxNext.addEventListener('click', e => {
-    e.stopPropagation();
-    if (currentImageIndex < images.length - 1) {
-        showImage(currentImageIndex + 1);
-    }
-});
-
-lightboxPrev.addEventListener('click', e => {
-    e.stopPropagation();
-    if (currentImageIndex > 0) {
-        showImage(currentImageIndex - 1);
-    }
-});
-
-/* ===== SWIPE В LIGHTBOX (плавный) ===== */
-
-let lbStartX = 0;
-let lbCurrentTranslate = 0;
-let lbPrevTranslate = 0;
-let lbDragging = false;
-
-lightbox.addEventListener('pointerdown', e => {
-    if (e.target === lightboxImg) {
-        lbDragging = true;
-        lbStartX = e.clientX;
-        lightboxImg.style.transition = "none";
-    }
-});
-
-lightbox.addEventListener('pointermove', e => {
-    if (!lbDragging) return;
-    const diff = e.clientX - lbStartX;
-    
-    // Добавляем сопротивление на границах
-    if ((currentImageIndex === 0 && diff > 0) || (currentImageIndex === images.length - 1 && diff < 0)) {
-        lbCurrentTranslate = diff / 3;
-    } else {
-        lbCurrentTranslate = diff;
-    }
-    
-    lightboxImg.style.transform = `translateX(${lbCurrentTranslate}px)`;
-});
-
-lightbox.addEventListener('pointerup', e => {
-    if (!lbDragging) return;
-    lbDragging = false;
-
-    const threshold = 80;
-    
-    if (lbCurrentTranslate < -threshold && currentImageIndex < images.length - 1) {
-        showImage(currentImageIndex + 1);
-    } else if (lbCurrentTranslate > threshold && currentImageIndex > 0) {
-        showImage(currentImageIndex - 1);
-    }
-
-    lightboxImg.style.transition = "transform 0.3s ease";
-    lightboxImg.style.transform = "translateX(0)";
-    lbCurrentTranslate = 0;
-});
-
-closeBtn.addEventListener('click', () => {
-    lightbox.style.display = 'none';
-});
-
-lightbox.addEventListener('click', e => {
-    if (e.target === lightbox) {
-        lightbox.style.display = 'none';
-    }
-});
-</script>
 
 <!-- CONTACT -->
 <section id="contact">
@@ -683,71 +548,224 @@ lightbox.addEventListener('click', e => {
     </div>
 </section>
 
-<!-- JS -->
-<script>
-    window.onload = function() {
-        window.scrollTo(0, 0);
-        document.querySelector('.hero').classList.add('loaded');
-    };
-</script>
-
 <!-- Кнопка прокрутки вверх -->
 <button id="scrollTopBtn" title="Наверх">
     <span class="arrow-up"></span>
 </button>
 
 <style>
-#scrollTopBtn {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 1000;
-    width: 50px;
-    height: 50px;
-    background: rgba(0,0,0,0.8);
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
+    #scrollTopBtn {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        z-index: 1000;
+        width: 50px;
+        height: 50px;
+        background: rgba(0,0,0,0.8);
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
 
-/* Стрелка вверх */
-.arrow-up {
-    width: 12px;
-    height: 12px;
-    border-left: 3px solid white;
-    border-bottom: 3px solid white;
-    transform: rotate(135deg);
-    display: inline-block;
-}
+    .arrow-up {
+        width: 12px;
+        height: 12px;
+        border-left: 3px solid white;
+        border-bottom: 3px solid white;
+        transform: rotate(135deg);
+        display: inline-block;
+    }
 
-/* Псевдокласс для наведения */
-#scrollTopBtn:hover {
-    background: rgba(0,0,0,1);
-}
+    #scrollTopBtn:hover {
+        background: rgba(0,0,0,1);
+    }
 </style>
 
+<!-- JS -->
 <script>
-// Кнопка
-const scrollTopBtn = document.getElementById("scrollTopBtn");
+    // Массив с изображениями (добавьте свои пути)
+    const galleryImages = [
+        'gallery/pic1.jpg',
+        'gallery/pic2.jpg',
+        'gallery/pic3.jpg',
+        'gallery/pic4.jpg',
+        'gallery/pic5.webp',
+        'gallery/pic6.jpeg',
+        'gallery/pic7.jpeg',
+        'gallery/pic8.jpg'
+    ];
 
-// Показать/скрыть кнопку при прокрутке
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 200) {
-        scrollTopBtn.style.opacity = 1;
-    } else {
-        scrollTopBtn.style.opacity = 0;
+    // Создание сетки галереи
+    const galleryGrid = document.querySelector('.gallery-grid');
+    
+    galleryImages.forEach((src, index) => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.innerHTML = `<img src="${src}" alt="Gallery image ${index + 1}" loading="lazy">`;
+        item.addEventListener('click', () => openLightbox(index));
+        galleryGrid.appendChild(item);
+    });
+
+    // Элементы лайтбокса
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxCounter = document.getElementById('lightboxCounter');
+    const imageContainer = document.getElementById('lightboxImageContainer');
+
+    let currentIndex = 0;
+    let startX = 0;
+    let isDragging = false;
+    let currentTranslate = 0;
+
+    // Открытие лайтбокса
+    function openLightbox(index) {
+        currentIndex = index;
+        updateLightboxImage();
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
     }
-});
 
-// Плавная прокрутка наверх
-scrollTopBtn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
+    // Закрытие лайтбокса
+    function closeLightbox() {
+        lightbox.classList.add('closing');
+        setTimeout(() => {
+            lightbox.classList.remove('active', 'closing');
+            document.body.style.overflow = '';
+        }, 300);
+    }
+
+    // Обновление изображения в лайтбоксе
+    function updateLightboxImage() {
+        lightboxImage.src = galleryImages[currentIndex];
+        lightboxImage.alt = `Image ${currentIndex + 1}`;
+        lightboxCounter.textContent = `${currentIndex + 1} / ${galleryImages.length}`;
+        lightboxImage.style.transform = 'translateX(0)';
+    }
+
+    // Переключение на предыдущее изображение
+    function prevImage() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateLightboxImage();
+        }
+    }
+
+    // Переключение на следующее изображение
+    function nextImage() {
+        if (currentIndex < galleryImages.length - 1) {
+            currentIndex++;
+            updateLightboxImage();
+        }
+    }
+
+    // Обработчики событий для кнопок
+    lightboxPrev.addEventListener('click', prevImage);
+    lightboxNext.addEventListener('click', nextImage);
+    lightboxClose.addEventListener('click', closeLightbox);
+
+    // Закрытие по клику на фон
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+
+    // Обработка клавиатуры
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        
+        switch(e.key) {
+            case 'Escape':
+                closeLightbox();
+                break;
+            case 'ArrowLeft':
+                prevImage();
+                break;
+            case 'ArrowRight':
+                nextImage();
+                break;
+        }
+    });
+
+    // Drag/Swipe для мобильных устройств
+    imageContainer.addEventListener('pointerdown', (e) => {
+        if (e.target === lightboxImage) {
+            isDragging = true;
+            startX = e.clientX;
+            currentTranslate = 0;
+            imageContainer.classList.add('dragging');
+            lightboxImage.style.transition = 'none';
+        }
+    });
+
+    imageContainer.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        
+        const diff = e.clientX - startX;
+        currentTranslate = diff;
+        
+        // Ограничиваем перетаскивание на границах
+        if ((currentIndex === 0 && diff > 0) || (currentIndex === galleryImages.length - 1 && diff < 0)) {
+            lightboxImage.style.transform = `translateX(${diff * 0.3}px)`;
+        } else {
+            lightboxImage.style.transform = `translateX(${diff}px)`;
+        }
+    });
+
+    imageContainer.addEventListener('pointerup', (e) => {
+        if (!isDragging) return;
+        
+        isDragging = false;
+        imageContainer.classList.remove('dragging');
+        lightboxImage.style.transition = 'transform 0.3s ease';
+        
+        const threshold = 100;
+        
+        if (currentTranslate < -threshold && currentIndex < galleryImages.length - 1) {
+            // Свайп влево - следующее фото
+            nextImage();
+        } else if (currentTranslate > threshold && currentIndex > 0) {
+            // Свайп вправо - предыдущее фото
+            prevImage();
+        } else {
+            // Возвращаем на место
+            lightboxImage.style.transform = 'translateX(0)';
+        }
+        
+        currentTranslate = 0;
+    });
+
+    imageContainer.addEventListener('pointercancel', () => {
+        isDragging = false;
+        imageContainer.classList.remove('dragging');
+        lightboxImage.style.transition = 'transform 0.3s ease';
+        lightboxImage.style.transform = 'translateX(0)';
+    });
+
+    // Инициализация hero
+    window.onload = function() {
+        window.scrollTo(0, 0);
+        document.querySelector('.hero').classList.add('loaded');
+    };
+
+    // Кнопка прокрутки вверх
+    const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+    window.addEventListener('scroll', () => {
+        scrollTopBtn.style.opacity = window.scrollY > 200 ? 1 : 0;
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 </script>
 
 </body>
