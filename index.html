@@ -342,12 +342,147 @@
 <!-- GALLERY -->
 <section id="gallery">
     <h2>Галерея</h2>
-    <div class="grid">
-        <div></div>
-        <div></div>
-        <div></div>
+
+    <div class="gallery-wrapper">
+        <button class="nav prev">&#10094;</button>
+
+        <div class="gallery-track">
+            <img src="gallery/pic1.jpg" alt="Фото 1">
+            <img src="gallery/pic2.jpg" alt="Фото 2">
+            <img src="gallery/pic3.jpg" alt="Фото 3">
+            <img src="gallery/pic4.jpg" alt="Фото 4">
+            <img src="gallery/pic5.webp" alt="Фото 5">
+            <img src="gallery/pic6.jpeg" alt="Фото 6">
+            <img src="gallery/pic7.jpeg" alt="Фото 7">
+        </div>
+
+        <button class="nav next">&#10095;</button>
     </div>
 </section>
+
+<!-- FULLSCREEN VIEW -->
+<div id="lightbox">
+    <span class="close">&times;</span>
+    <img class="lightbox-img">
+</div>
+
+<style>
+#gallery {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.gallery-wrapper {
+    position: relative;
+    overflow: hidden; /* скрываем ползунок */
+}
+
+.gallery-track {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    transition: transform 0.4s ease;
+}
+
+.gallery-track img {
+    max-height: 400px;
+    width: auto; /* без обрезки */
+    cursor: pointer;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+/* Кнопки */
+.nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.prev { left: 10px; }
+.next { right: 10px; }
+
+/* Lightbox */
+#lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.lightbox-img {
+    max-width: 95%;
+    max-height: 95%;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 50px;
+    color: white;
+    cursor: pointer;
+}
+</style>
+
+<script>
+const track = document.querySelector('.gallery-track');
+const images = document.querySelectorAll('.gallery-track img');
+const next = document.querySelector('.next');
+const prev = document.querySelector('.prev');
+
+let index = 0;
+
+function updateGallery() {
+    const imageWidth = images[0].offsetWidth + 20; // ширина + gap
+    track.style.transform = `translateX(-${index * imageWidth}px)`;
+}
+
+next.addEventListener('click', () => {
+    index++;
+    if (index >= images.length) index = 0; // по кругу
+    updateGallery();
+});
+
+prev.addEventListener('click', () => {
+    index--;
+    if (index < 0) index = images.length - 1; // по кругу
+    updateGallery();
+});
+
+/* Lightbox */
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.querySelector('.lightbox-img');
+const closeBtn = document.querySelector('.close');
+
+images.forEach(img => {
+    img.addEventListener('click', () => {
+        lightbox.style.display = 'flex';
+        lightboxImg.src = img.src;
+    });
+});
+
+closeBtn.addEventListener('click', () => {
+    lightbox.style.display = 'none';
+});
+
+lightbox.addEventListener('click', (e) => {
+    if (e.target !== lightboxImg) {
+        lightbox.style.display = 'none';
+    }
+});
+</script>
 
 <!-- CONTACT -->
 <section id="contact">
@@ -427,5 +562,4 @@ scrollTopBtn.addEventListener('click', () => {
 </script>
 
 </body>
-
 </html>
