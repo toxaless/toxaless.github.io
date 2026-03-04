@@ -696,7 +696,7 @@
 .events-container {
     max-width: 900px;
     width: 100%;
-    margin: 0 auto;
+    margin: 0;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -1112,6 +1112,204 @@
             }
         }
 
+    /* ===== ГАЛЕРЕЯ - ВИДЕО ===== */
+.gallery-section {
+    width: 100%;
+    margin-bottom: 60px;
+}
+
+.gallery-section:last-child {
+    margin-bottom: 0;
+}
+
+.gallery-subtitle {
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: #fff;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.videos-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+    width: 100%;
+}
+
+.video-card {
+    background: rgba(255,255,255,0.02);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 30px rgba(0,0,0,0.3);
+    border-color: rgba(255,255,255,0.1);
+}
+
+.video-card.featured {
+    grid-column: span 2; /* главное видео занимает больше места */
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 соотношение сторон */
+    height: 0;
+    overflow: hidden;
+    background: #000;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.video-info {
+    padding: 20px;
+}
+
+.video-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+    font-family: 'Nunito-SemiBoldItalic', Arial, Helvetica, sans-serif;
+}
+
+.video-description {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+}
+
+/* Карточка "Больше видео" */
+.video-card.more-videos {
+    background: rgba(255,255,255,0.03);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+}
+
+.more-videos-link {
+    text-decoration: none;
+    color: white;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.more-videos-content {
+    text-align: center;
+    padding: 40px;
+}
+
+.more-videos-icon {
+    font-size: 60px;
+    display: block;
+    margin-bottom: 20px;
+    color: rgba(255,255,255,0.8);
+    transition: transform 0.3s ease;
+}
+
+.more-videos-link:hover .more-videos-icon {
+    transform: scale(1.2);
+    color: #fff;
+}
+
+.more-videos-text {
+    font-size: 24px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Nunito-SemiBoldItalic', Arial, Helvetica, sans-serif;
+}
+
+.more-videos-count {
+    font-size: 16px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 1px;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 1024px) {
+    .video-card.featured {
+        grid-column: span 1; /* на планшете главное видео не растягиваем */
+    }
+}
+
+@media (max-width: 768px) {
+    .gallery-subtitle {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    
+    .videos-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .video-title {
+        font-size: 18px;
+    }
+    
+    .video-description {
+        font-size: 13px;
+    }
+    
+    .video-card.more-videos {
+        min-height: 200px;
+    }
+    
+    .more-videos-icon {
+        font-size: 40px;
+        margin-bottom: 15px;
+    }
+    
+    .more-videos-text {
+        font-size: 20px;
+    }
+    
+    .more-videos-count {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .video-card.more-videos {
+        min-height: 150px;
+    }
+    
+    .more-videos-content {
+        padding: 20px;
+    }
+    
+    .more-videos-icon {
+        font-size: 30px;
+        margin-bottom: 10px;
+    }
+    
+    .more-videos-text {
+        font-size: 18px;
+    }
+}
+
         .arrow {
             transition: transform 0.3s ease;
         }
@@ -1121,9 +1319,47 @@
 <!-- ГАЛЕРЕЯ -->
 <section id="gallery">
     <h2>Галерея</h2>
-    <div class="gallery-container">
-        <div class="gallery-grid" id="galleryGrid">
-            <!-- Галерея будет заполнена через JavaScript -->
+    
+    <!-- Фото -->
+    <div class="gallery-section">
+        <h3 class="gallery-subtitle">Фото</h3>
+        <div class="gallery-container">
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Галерея будет заполнена через JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Видео -->
+    <div class="gallery-section">
+        <h3 class="gallery-subtitle">Видео</h3>
+        <div class="videos-container">
+            <!-- Главное видео на странице -->
+            <div class="video-card featured">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/gieQh1E0b4o?origin=toxaless.github.io" 
+                            title="dj set на ибице" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="video-info">
+                    <h4 class="video-title">dj set на ибице</h4>
+                    <p class="video-description">Запись с выступления на Ибице, 2024</p>
+                </div>
+            </div>
+            
+            <!-- Ссылка на остальные видео -->
+            <div class="video-card more-videos">
+                <a href="videos.html" class="more-videos-link">
+                    <div class="more-videos-content">
+                        <span class="more-videos-icon">▶</span>
+                        <span class="more-videos-text">Больше видео</span>
+                        <span class="more-videos-count">+8 видео</span>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
 </section>
