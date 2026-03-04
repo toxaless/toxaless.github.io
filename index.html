@@ -172,19 +172,107 @@
         #gallery { background: #111; }
         #contact { background: #181818; }
 
-        /* CONTACT */
+        /* Оформление секции контактов */
+#contact {
+    background: #181818;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 120px;
+}
 
-        .contact-links a {
-            display: block;
-            margin-bottom: 15px;
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-        }
+#contact h2 {
+    margin-bottom: 40px;
+    width: 100%;
+}
 
-        .contact-links a:hover {
-            opacity: 0.7;
-        }
+.contact-section,
+.links-section {
+    width: 100%;
+    max-width: 900px;
+    margin-bottom: 40px;
+}
+
+.contact-section h3,
+.links-section h3 {
+    font-size: 24px;
+    color: #fff;
+    margin-bottom: 20px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.8;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 10px;
+}
+
+.contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+    width: fit-content;
+    padding: 5px 0;
+}
+
+.contact-item:hover {
+    opacity: 0.8;
+    transform: translateX(5px);
+}
+
+.contact-icon {
+    width: 32px;
+    height: 32px;
+    filter: brightness(0) invert(1);
+    transition: filter 0.3s ease;
+}
+
+.contact-item:hover .contact-icon {
+    filter: brightness(0) invert(0.8);
+}
+
+/* Адаптация для телефонов */
+@media (max-width: 768px) {
+    #contact {
+        padding-top: 100px;
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+    
+    .contact-section,
+    .links-section {
+        margin-bottom: 30px;
+    }
+    
+    .contact-section h3,
+    .links-section h3 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .contact-icon {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .contact-item {
+        font-size: 16px;
+        gap: 12px;
+    }
+    
+    .contact-item:hover {
+        transform: translateX(3px);
+    }
+}
 
         /* ADAPTIVE */
 
@@ -776,11 +864,38 @@
 
 <!-- CONTACT -->
 <section id="contact">
-    <h2>Контакты</h2>
-    <div class="contact-links">
-        <a href="#">Instagram</a>
-        <a href="#">Telegram</a>
-        <a href="#">Email</a>
+    <h2>Контакты / Ссылки</h2>
+    
+    <div class="contact-section">
+        <h3>Контакты</h3>
+        <div class="contact-links">
+            <a href="https://t.me/ssssvoboda" target="_blank" class="contact-item" title="Telegram (личный)">
+                <img src="icons/telegram.png" alt="Telegram" class="contact-icon">
+                <span>Telegram</span>
+            </a>
+            <a href="https://instagram.com/ssssvoboda" target="_blank" class="contact-item" title="Instagram">
+                <img src="icons/inst.png" alt="Instagram" class="contact-icon">
+                <span>Instagram</span>
+            </a>
+        </div>
+    </div>
+    
+    <div class="links-section">
+        <h3>Ссылки</h3>
+        <div class="contact-links">
+            <a href="https://t.me/ssssdvgmusic" target="_blank" class="contact-item" title="Telegram канал">
+                <img src="icons/telegram.png" alt="Telegram channel" class="contact-icon">
+                <span>Telegram канал</span>
+            </a>
+            <a href="https://on.soundcloud.com/z7IJLY8Zt3LuS2S8Ai" target="_blank" class="contact-item" title="SoundCloud">
+                <img src="icons/soundcloud.png" alt="SoundCloud" class="contact-icon">
+                <span>SoundCloud</span>
+            </a>
+            <a href="https://open.spotify.com/user/31xv2fvur4a22uawf6lumifoimzy?si=dbe1628fac0b4b14" target="_blank" class="contact-item" title="Spotify">
+                <img src="icons/spotify.png" alt="Spotify" class="contact-icon">
+                <span>Spotify</span>
+            </a>
+        </div>
     </div>
 </section>
 
