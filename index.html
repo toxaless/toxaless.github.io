@@ -93,7 +93,7 @@
 .title {
     position: relative;
     z-index: 2;
-    font-size: 100px;
+    font-size: 85px;
     letter-spacing: 15px;
     text-transform: lowercase;
     font-family: 'Nunito-SemiBoldItalic', Arial, Helvetica, sans-serif;
@@ -420,6 +420,110 @@
             z-index: 10001;
         }
 
+/* Альтернативные стили для секции "Обо мне" (более сдержанные) */
+/* Стили для секции "Обо мне" */
+#about {
+    background: #111;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; /* выравнивание содержимого слева */
+}
+
+.about-content {
+    max-width: 900px;
+    margin: 0; /* убираем margin: 0 auto */
+    padding: 20px;
+    width: 100%; /* чтобы занимал всю ширину */
+}
+
+.about-name {
+    font-size: 60px;
+    font-family: 'Nunito-SemiBoldItalic', Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    font-style: italic;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, #fff 0%, #ccc 50%, #fff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 5px;
+    text-transform: lowercase;
+    position: relative;
+    display: inline-block;
+}
+
+.about-name::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, #fff, transparent);
+}
+
+.about-description {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.about-highlight {
+    font-size: 24px;
+    line-height: 1.5;
+    font-weight: 500;
+    color: #fff;
+    padding: 20px;
+    background: rgba(255,255,255,0.05);
+    border-left: 4px solid rgba(255,255,255,0.3);
+    border-radius: 0 12px 12px 0;
+    font-style: italic;
+    max-width: 800px; /* ограничиваем ширину для удобства чтения */
+}
+
+.about-text {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #ddd;
+    text-align: left; /* меняем на left вместо justify */
+    padding: 0 10px;
+    max-width: 800px; /* ограничиваем ширину для удобства чтения */
+}
+
+/* Адаптация для смартфонов */
+@media (max-width: 768px) {
+    .about-name {
+        font-size: 42px;
+        letter-spacing: 3px;
+        margin-bottom: 25px;
+    }
+    
+    .about-name::after {
+        width: 70px;
+        height: 2px;
+    }
+    
+    .about-highlight {
+        font-size: 20px;
+        padding: 15px;
+        line-height: 1.4;
+        max-width: 100%;
+    }
+    
+    .about-text {
+        font-size: 16px;
+        line-height: 1.6;
+        text-align: left;
+        padding: 0;
+        max-width: 100%;
+    }
+    
+    .about-description {
+        gap: 20px;
+    }
+}
+
         @media (max-width: 768px) {
             .lightbox-image-container {
                 padding: 20px;
@@ -474,9 +578,16 @@
 </div>
 
 <!-- ABOUT -->
+<!-- ABOUT -->
 <section id="about">
     <h2>Обо мне</h2>
-    <p>Описание твоего стиля, выступлений и атмосферы.</p>
+    <div class="about-content">
+        <div class="about-name">ssssvoboda</div>
+        <div class="about-description">
+            <p class="about-highlight">Мультижанровый диджей с обширным опытом работы в звуковых исследованиях, берущих свое начало в 2019 году</p>
+            <p class="about-text">Влюбленная в мелодичные хитросплетения инструментальных партий, она тщательно подготавливает свои музыкальные находки, оказывая терапевтический эффект на слушателей. Её hard skill — отыскивать грув в разных стилях музыки, оказывая воздействие на физическое и эмоциональное состояние.</p>
+        </div>
+    </div>
 </section>
 
 <!-- PLAYLISTS -->
@@ -880,5 +991,4 @@
 </script>
 
 </body>
-
 </html>
