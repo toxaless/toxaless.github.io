@@ -683,6 +683,243 @@
         .lightbox.closing {
             opacity: 0;
         }
+
+    /* ===== ПРЕДСТОЯЩИЕ МЕРОПРИЯТИЯ ===== */
+#events {
+    background: #0a0a0a;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 120px 10% 60px 10%;
+}
+
+.events-container {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Стили для кликабельных карточек */
+.event-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.event-card-link:hover {
+    transform: translateX(5px);
+}
+
+.event-card-link:hover .event-card {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+.event-card-link:active .event-card {
+    transform: scale(0.98);
+}
+
+/* Сам event-card (немного обновим) */
+.event-card {
+    display: flex;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    cursor: pointer; /* добавим курсор-указатель */
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .event-card-link:hover {
+        transform: translateX(3px);
+    }
+}
+
+.event-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Блок с датой */
+.event-date {
+    min-width: 100px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #111 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 10px;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.event-day {
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.event-month {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 400;
+}
+
+/* Детали мероприятия */
+.event-details {
+    flex: 1;
+    padding: 20px 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.event-name {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 1px;
+    margin: 0;
+    font-family: 'Nunito-SemiBoldItalic', Arial, Helvetica, sans-serif;
+}
+
+.event-genre {
+    font-size: 14px;
+    padding: 5px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.event-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.event-location,
+.event-time {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+}
+
+.event-icon {
+    font-size: 18px;
+    opacity: 0.8;
+    min-width: 24px;
+}
+
+/* Кнопка "Все мероприятия" */
+.events-more {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.events-button {
+    display: inline-block;
+    padding: 12px 40px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-radius: 40px;
+    transition: all 0.3s ease;
+    font-weight: 400;
+}
+
+.events-button:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    #events {
+        padding: 100px 5% 40px 5%;
+    }
+    
+    .event-card {
+        flex-direction: column;
+    }
+    
+    .event-date {
+        flex-direction: row;
+        min-width: auto;
+        padding: 15px 20px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        gap: 10px;
+    }
+    
+    .event-day {
+        font-size: 28px;
+        margin-bottom: 0;
+    }
+    
+    .event-month {
+        font-size: 14px;
+    }
+    
+    .event-details {
+        padding: 15px 20px;
+    }
+    
+    .event-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .event-name {
+        font-size: 20px;
+    }
+    
+    .event-genre {
+        font-size: 12px;
+        padding: 4px 10px;
+    }
+    
+    .event-location,
+    .event-time {
+        font-size: 14px;
+    }
+    
+    .events-button {
+        padding: 10px 30px;
+        font-size: 14px;
+    }
+}
     </style>
 </head>
 <body>
@@ -690,10 +927,11 @@
 <!-- HERO -->
 <div class="hero">
     <nav>
-        <a href="#about">Обо мне</a>
-        <a href="#playlists">Плейлисты</a>
-        <a href="#gallery">Галерея</a>
-        <a href="#contact">Контакты</a>
+    <a href="#about">Обо мне</a>
+    <a href="#events">Мероприятия</a>
+    <a href="#playlists">Плейлисты</a>
+    <a href="#gallery">Галерея</a>
+    <a href="#contact">Контакты</a>
     </nav>
     <div class="title">ssssvoboda</div>
 </div>
@@ -708,6 +946,39 @@
             <p class="about-highlight">Мультижанровый диджей с обширным опытом работы в звуковых исследованиях, берущих свое начало в 2019 году</p>
             <p class="about-text">Влюбленная в мелодичные хитросплетения инструментальных партий, она тщательно подготавливает свои музыкальные находки, оказывая терапевтический эффект на слушателей. Её hard skill — отыскивать грув в разных стилях музыки, оказывая воздействие на физическое и эмоциональное состояние.</p>
         </div>
+    </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events">
+    <h2>Предстоящие мероприятия</h2>
+    
+    <div class="events-container">
+        <!-- Мероприятие 1 -->
+        <a href="https://t.me/opendeckspb/303" target="_blank" class="event-card-link">
+            <div class="event-card">
+                <div class="event-date">
+                    <span class="event-day">7</span>
+                    <span class="event-month">МАР</span>
+                </div>
+                <div class="event-details">
+                    <div class="event-header">
+                        <h3 class="event-name">MEGA TUSA 5.0</h3>
+                        <span class="event-genre">breakcore</span>
+                    </div>
+                    <div class="event-info">
+                        <div class="event-location">
+                            <span class="event-icon">📍</span>
+                            <span>Бар "Усы На Пене", Лиговский пр-т 50, к16 </span>
+                        </div>
+                        <div class="event-time">
+                            <span class="event-icon">🕒</span>
+                            <span>20:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
     </div>
 </section>
 
@@ -824,10 +1095,20 @@
 
         @media (max-width: 768px) {
             .playlist-widget {
-                height: 350px;
+                height: 70vh; /* 70% от высоты экрана */
+                min-height: 400px; /* но не меньше 400px */
+                max-height: 600px; /* и не больше 600px */
             }
+            
             .playlist-header {
                 font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .playlist-widget {
+                height: 80vh;
+                min-height: 450px;
             }
         }
 
