@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>ssssvoboda - Видео</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        @font-face {
+            font-family: 'Nunito-SemiBoldItalic';
+            src: url('fonts/nunito-semibolditalic.ttf') format('truetype');
+            font-weight: 600;
+            font-style: italic;
+            font-display: swap;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito-SemiBoldItalic';
+        }
+        
+        body {
+            background: #303030;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        /* Затемнение фона как на главной */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: -1;
+        }
+        
+        /* Шапка */
+        .header {
+            position: relative;
+            top: 0;
+            z-index: 100;
+            padding: 20px 5%;
+            background-image: url('fon.jpg');
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed; /* фон не двигается при прокрутке */
+            background-repeat: no-repeat;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* черный с прозрачностью 50% */
+            backdrop-filter: blur(2px); /* легкое размытие (опционально) */
+            z-index: -1;
+            border-bottom: inherit;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .back-link {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.3s;
+            font-family: 'Nunito-SemiBoldItalic';
+        }
+        
+        .back-link:hover {
+            opacity: 0.6;
+        }
+        
+        .back-arrow {
+            font-size: 24px;
+            line-height: 1;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            font-style: italic;
+            letter-spacing: 3px;
+
+            font-family: 'Nunito-SemiBoldItalic';
+            background: linear-gradient(135deg, #fff 0%, #ccc 50%, #fff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Основной контент */
+        .main {
+            flex: 1;
+            padding: 40px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .videos-header {
+            margin-bottom: 40px;
+        }
+        
+        .videos-title {
+            font-size: 48px;
+            margin-bottom: 10px;
+            font-family: 'Nunito-SemiBoldItalic';
+            font-weight: 600;
+            font-style: italic;
+            background: linear-gradient(135deg, #fff 0%, #ccc 50%, #fff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+            letter-spacing: 4px;
+
+        }
+        
+        .videos-count {
+            color: rgba(255,255,255,0.6);
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+        
+        /* Сетка видео */
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        /* Карточка видео */
+        .video-card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.5);
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(0, 0, 0, 0.7);
+        }
+        
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            background: #000;
+        }
+        
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .video-info {
+            padding: 20px;
+        }
+        
+        .video-title {
+            font-size: 18px;
+            font-weight: 600;
+            font-style: italic;
+            color: #fff;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            font-family: 'Nunito-SemiBoldItalic';
+            letter-spacing: 0.5px;
+        }
+        
+        .video-meta {
+            display: flex;
+            gap: 15px;
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+        }
+        
+        .video-date, .video-duration {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        /* Состояние без видео */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            border-radius: 24px;
+            border: 2px dashed rgba(255,255,255,0.2);
+        }
+        
+        .empty-state-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+        
+        .empty-state-text {
+            font-size: 24px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 10px;
+            font-family: 'Nunito-SemiBoldItalic';
+            font-style: italic;
+        }
+        
+        .empty-state-sub {
+            font-size: 16px;
+            color: rgba(255,255,255,0.5);
+        }
+        
+        /* Футер */
+        .footer {
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            padding: 30px 5%;
+            text-align: center;
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            z-index: 1;
+            letter-spacing: 1px;
+        }
+        
+        /* Адаптация для планшетов */
+        @media (max-width: 1024px) {
+            .videos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 25px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .videos-title {
+                font-size: 42px;
+            }
+        }
+        
+        /* Адаптация для телефонов */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 4%;
+            }
+            
+            .header-content {
+                gap: 15px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+                letter-spacing: 2px;
+            }
+            
+            .main {
+                padding: 30px 4%;
+            }
+            
+            .videos-header {
+                margin-bottom: 30px;
+            }
+            
+            .videos-title {
+                font-size: 36px;
+                letter-spacing: 2px;
+            }
+            
+            .videos-count {
+                font-size: 16px;
+            }
+            
+            .videos-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .video-info {
+                padding: 15px;
+            }
+            
+            .video-title {
+                font-size: 16px;
+            }
+            
+            .video-meta {
+                font-size: 13px;
+                gap: 10px;
+            }
+            
+            .back-link {
+                font-size: 14px;
+            }
+            
+            .back-arrow {
+                font-size: 20px;
+            }
+        }
+        
+        /* Для очень маленьких телефонов */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 18px;
+                letter-spacing: 1px;
+            }
+            
+            .videos-title {
+                font-size: 30px;
+            }
+            
+            .back-link span:last-child {
+                display: none; /* прячем текст "Назад" на очень узких экранах */
+            }
+            
+            .videos-count {
+                font-size: 14px;
+            }
+        }
+        
+        /* Анимация загрузки */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .video-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        /* Подключение шрифта */
+        @font-face {
+            font-family: 'Nunito-SemiBoldItalic';
+            src: url('fonts/nunito-semibolditalic.ttf') format('truetype');
+            font-weight: 600;
+            font-style: italic;
+            font-display: swap;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html#gallery" class="back-link">
+                <span class="back-arrow">←</span>
+                <span>назад</span>
+            </a>
+            <h1>ssssvoboda</h1>
+        </div>
+    </header>
+    
+    <main class="main">
+        <div class="videos-header">
+            <h2 class="videos-title">Видео</h2>
+            <div class="videos-count">4 видео</div>
+        </div>
+        
+        <div class="videos-grid">
+            <!-- Видео 1 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/_XejvqlCFHs" 
+                            title="DJ Set" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="video-info">
+                    <h3 class="video-title">DJ Set в клубе</h3>
+                    <div class="video-meta">
+                        <span class="video-date">📅 2024</span>
+                        <span class="video-duration">⏱ 45:22</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Видео 2 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/m6pE8psWJXE" 
+                            title="Live Performance" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="video-info">
+                    <h3 class="video-title">Live на фестивале</h3>
+                    <div class="video-meta">
+                        <span class="video-date">📅 2023</span>
+                        <span class="video-duration">⏱ 32:15</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Видео 3 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/6Dt7Z7TgdD4" 
+                            title="Studio Session" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="video-info">
+                    <h3 class="video-title">Студийная сессия</h3>
+                    <div class="video-meta">
+                        <span class="video-date">📅 2024</span>
+                        <span class="video-duration">⏱ 28:40</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Видео 4 -->
+            <div class="video-card">
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/pdX0wO8xOSY" 
+                            title="Boiler Room Style" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="video-info">
+                    <h3 class="video-title">Boiler Room сет</h3>
+                    <div class="video-meta">
+                        <span class="video-date">📅 2023</span>
+                        <span class="video-duration">⏱ 52:10</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Блок с информацией (появится, если видео закончатся) -->
+        <!--
+        <div class="empty-state">
+            <div class="empty-state-icon">🎥</div>
+            <div class="empty-state-text">здесь пока нет видео</div>
+            <div class="empty-state-sub">скоро появятся новые записи</div>
+        </div>
+        -->
+    </main>
+    
+    <footer class="footer">
+        <p>© 2024 ssssvoboda</p>
+    </footer>
+    
+    <script>
+        // Автоматическое обновление количества видео
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoCards = document.querySelectorAll('.video-card').length;
+            const countElement = document.querySelector('.videos-count');
+            if (countElement) {
+                countElement.textContent = videoCards + ' видео';
+            }
+        });
+    </script>
+</body>
+</html>
