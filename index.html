@@ -1134,11 +1134,26 @@
     display: inline-block;
 }
 
+#gallery {
+    background: #111;
+    padding-bottom: 140px; /* увеличиваем отступ снизу */
+}
+
+.gallery-section {
+    width: 100%;
+    margin-bottom: 60px;
+}
+
+.gallery-section:last-child {
+    margin-bottom: 0;
+}
+
 .videos-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 30px;
     width: 100%;
+    margin-bottom: 20px; /* небольшой дополнительный отступ */
 }
 
 .video-card {
@@ -1337,7 +1352,7 @@
             <!-- Главное видео на странице -->
             <div class="video-card featured">
                 <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/gieQh1E0b4o?origin=toxaless.github.io" 
+                    <iframe src="https://www.youtube.com/embed/gieQh1E0b4o" 
                             title="dj set на ибице" 
                             frameborder="0" 
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
