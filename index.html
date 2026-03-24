@@ -65,39 +65,140 @@
             background: rgba(0,0,0,0.5);
         }
 
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            z-index: 999;
-            padding: 20px 0;
-            background: rgba(0, 0, 0, 0.8);
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: opacity 1s ease 0.8s, transform 1s ease 0.8s;
-        }
+        /* ===== НАВИГАЦИЯ С БУРГЕР-МЕНЮ ДЛЯ ТЕЛЕФОНОВ ===== */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 1s ease 0.8s, transform 1s ease 0.8s;
+}
 
-        .hero.loaded nav {
-            opacity: 1;
-            transform: translateY(0);
-        }
+.hero.loaded nav {
+    opacity: 1;
+    transform: translateY(0);
+}
 
-        nav a {
-            text-decoration: none;
-            color: white;
-            font-size: 16px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: 0.3s;
-        }
+/* Десктопная версия */
+.nav-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
 
-        nav a:hover {
-            opacity: 0.6;
-        }
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: 0.3s;
+    padding: 8px 0;
+    position: relative;
+    font-weight: 500;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Бургер-кнопка (скрыта на ПК) */
+.burger {
+    display: none;
+    cursor: pointer;
+    width: 30px;
+    height: 20px;
+    flex-direction: column;
+    justify-content: space-between;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.burger span {
+    width: 100%;
+    height: 2px;
+    background: white;
+    transition: 0.3s;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .burger {
+        display: flex;
+    }
+    
+    .nav-links {
+        position: fixed;
+        top: 60px;
+        left: -100%;
+        width: 100%;
+        height: auto;
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        gap: 0;
+        transition: left 0.3s ease;
+        padding: 20px 0;
+    }
+    
+    .nav-links.active {
+        left: 0;
+    }
+    
+    .nav-links a {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 15px 20px;
+        font-size: 14px;
+        letter-spacing: 2px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-links a::after {
+        display: none;
+    }
+    
+    .nav-links a:hover {
+        background: rgba(255, 255, 255, 0.1);
+        opacity: 1;
+    }
+    
+    /* Анимация бургера при открытии */
+    .burger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    .burger.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .burger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+    }
+}
 
 .title {
     position: relative;
@@ -936,12 +1037,19 @@
 <!-- HERO -->
 <div class="hero">
     <nav>
-    <a href="#about">Обо мне</a>
-    <a href="#events">Мероприятия</a>
-    <a href="#playlists">Плейлисты</a>
-    <a href="#gallery">Галерея</a>
-    <a href="#contact">Контакты</a>
-    </nav>
+    <button class="burger" id="burgerBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+        <a href="#about">Обо мне</a>
+        <a href="#events">Мероприятия</a>
+        <a href="#playlists">Плейлисты</a>
+        <a href="#gallery">Галерея</a>
+        <a href="#contact">Контакты</a>
+    </div>
+</nav>
 
     <div class="title">ssssvoboda</div>
     <!-- МИНИ-ПЛЕЕР -->
@@ -1871,6 +1979,25 @@
     scrollTopBtn.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+    // Добавьте этот код в существующий скрипт
+const burgerBtn = document.getElementById('burgerBtn');
+const navLinks = document.getElementById('navLinks');
+
+if (burgerBtn) {
+    burgerBtn.addEventListener('click', () => {
+        burgerBtn.classList.toggle('active');
+        navLinks.classList.toggle('active');
+    });
+    
+    // Закрытие меню при клике на ссылку
+    const links = document.querySelectorAll('.nav-links a');
+    links.forEach(link => {
+        link.addEventListener('click', () => {
+            burgerBtn.classList.remove('active');
+            navLinks.classList.remove('active');
+        });
+    });
+}
 </script>
 <script>
     // Мини-плеер
