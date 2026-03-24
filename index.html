@@ -45,8 +45,9 @@
             background: url('fon.jpg') center center / cover no-repeat;
             position: relative;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
             opacity: 0;
             transform: scale(1.05);
             transition: opacity 1.2s ease, transform 1.2s ease;
@@ -941,7 +942,32 @@
     <a href="#gallery">Галерея</a>
     <a href="#contact">Контакты</a>
     </nav>
+
     <div class="title">ssssvoboda</div>
+    <!-- МИНИ-ПЛЕЕР -->
+    <div class="mini-player">
+        <img class="player-cover" id="playerCover" src="" alt="cover">
+        <div class="player-controls">
+            <button class="play-btn" id="playBtn">
+                <svg viewBox="0 0 24 24">
+                    <polygon points="5,3 19,12 5,21" fill="currentColor"/>
+                </svg>
+            </button>
+        </div>
+        <div class="player-info">
+            <span class="track-title" id="trackTitle">Superior Race</span>
+            <span class="track-artist" id="trackArtist">Dopplereffekt</span>
+        </div>
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="time-info">
+                <span id="currentTime">0:00</span>
+                <span id="durationTime">0:00</span>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- ABOUT -->
@@ -1361,6 +1387,151 @@
         .arrow {
             transition: transform 0.3s ease;
         }
+
+    /* ===== МИНИ-ПЛЕЕР ===== */
+.mini-player {
+    position: relative;
+    z-index: 2;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    padding: 12px 24px;
+    border-radius: 60px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s ease 0.6s, transform 1s ease 0.6s;
+}
+
+.hero.loaded .mini-player {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.player-cover {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.player-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.play-btn {
+    background: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.play-btn:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+.play-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: #000;
+    margin-left: 2px;
+}
+
+.player-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.track-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    letter-spacing: 0.5px;
+}
+
+.track-artist {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.progress-container {
+    width: 180px;
+    cursor: pointer;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    position: relative;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: white;
+    border-radius: 3px;
+    transition: width 0.1s linear;
+}
+
+.time-info {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 4px;
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+    .mini-player {
+        padding: 8px 16px;
+        gap: 12px;
+        margin-top: 30px;
+    }
+    
+    .player-cover {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .play-btn {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .progress-container {
+        width: 120px;
+    }
+    
+    .track-title {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .mini-player {
+        padding: 6px 12px;
+        gap: 8px;
+    }
+    
+    .progress-container {
+        width: 80px;
+    }
+}
     </style>
 </section>
 
@@ -1701,6 +1872,152 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 </script>
+<script>
+    // Мини-плеер
+    const audio = new Audio();
+    let isPlaying = false;
+    
+    // Укажите путь к вашему MP3 файлу
+    const trackUrl = 'music/Superior Race.mp3'; // ← ЗДЕСЬ УКАЖИТЕ ПУТЬ К ВАШЕМУ MP3
+    
+    // Элементы плеера
+    const playBtn = document.getElementById('playBtn');
+    const playerCover = document.getElementById('playerCover');
+    const trackTitle = document.getElementById('trackTitle');
+    const trackArtist = document.getElementById('trackArtist');
+    const progressFill = document.getElementById('progressFill');
+    const currentTimeSpan = document.getElementById('currentTime');
+    const durationTimeSpan = document.getElementById('durationTime');
+    const progressContainer = document.getElementById('progressContainer');
+    
+    // Функция для извлечения метаданных из MP3 (обложка, название)
+    async function loadTrackMetadata() {
+        try {
+            // Создаем временный audio элемент для чтения метаданных
+            const tempAudio = new Audio();
+            tempAudio.src = trackUrl;
+            
+            // Ждем загрузки метаданных
+            await new Promise((resolve) => {
+                tempAudio.addEventListener('loadedmetadata', resolve, { once: true });
+                tempAudio.load();
+            });
+            
+            // Пытаемся получить обложку через fetch и jsmediatags
+            const response = await fetch(trackUrl);
+            const blob = await response.blob();
+            
+            // Используем jsmediatags если доступен, иначе стандартная обложка
+            if (window.jsmediatags) {
+                window.jsmediatags.read(blob, {
+                    onSuccess: (tag) => {
+                        const tags = tag.tags;
+                        if (tags.title) trackTitle.textContent = tags.title;
+                        if (tags.artist) trackArtist.textContent = tags.artist;
+                        if (tags.picture) {
+                            const { data, format } = tags.picture;
+                            let base64String = '';
+                            for (let i = 0; i < data.length; i++) {
+                                base64String += String.fromCharCode(data[i]);
+                            }
+                            playerCover.src = `data:${format};base64,${btoa(base64String)}`;
+                        } else {
+                            playerCover.src = 'default-cover.jpg'; // заглушка
+                        }
+                    },
+                    onError: () => {
+                        playerCover.src = 'default-cover.jpg';
+                    }
+                });
+            } else {
+                playerCover.src = 'default-cover.jpg';
+            }
+            
+            // Если не удалось получить название из тегов, берем имя файла
+            if (trackTitle.textContent === 'Загрузка...') {
+                const fileName = trackUrl.split('/').pop().replace('.mp3', '');
+                trackTitle.textContent = fileName;
+            }
+            
+        } catch (error) {
+            console.log('Не удалось загрузить метаданные:', error);
+            trackTitle.textContent = 'Трек';
+            playerCover.src = 'default-cover.jpg';
+        }
+    }
+    
+    // Настройка основного аудио
+    audio.src = trackUrl;
+    audio.preload = 'metadata';
+    
+    // При загрузке метаданных
+    audio.addEventListener('loadedmetadata', () => {
+        const minutes = Math.floor(audio.duration / 60);
+        const seconds = Math.floor(audio.duration % 60);
+        durationTimeSpan.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    });
+    
+    // Обновление прогресса
+    audio.addEventListener('timeupdate', () => {
+        const percent = (audio.currentTime / audio.duration) * 100;
+        progressFill.style.width = `${percent}%`;
+        
+        const minutes = Math.floor(audio.currentTime / 60);
+        const seconds = Math.floor(audio.currentTime % 60);
+        currentTimeSpan.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    });
+    
+    // По окончании трека
+    audio.addEventListener('ended', () => {
+        isPlaying = false;
+        updatePlayButton(false);
+        audio.currentTime = 0;
+        progressFill.style.width = '0%';
+    });
+    
+    // Функция обновления кнопки play/pause
+    function updatePlayButton(playing) {
+        if (playing) {
+            playBtn.innerHTML = `
+                <svg viewBox="0 0 24 24" width="18" height="18">
+                    <rect x="6" y="4" width="4" height="16" fill="currentColor"/>
+                    <rect x="14" y="4" width="4" height="16" fill="currentColor"/>
+                </svg>
+            `;
+        } else {
+            playBtn.innerHTML = `
+                <svg viewBox="0 0 24 24" width="18" height="18">
+                    <polygon points="5,3 19,12 5,21" fill="currentColor"/>
+                </svg>
+            `;
+        }
+    }
+    
+    // Play/Pause
+    playBtn.addEventListener('click', () => {
+        if (isPlaying) {
+            audio.pause();
+            isPlaying = false;
+            updatePlayButton(false);
+        } else {
+            audio.play();
+            isPlaying = true;
+            updatePlayButton(true);
+        }
+    });
+    
+    // Клик по прогресс-бару
+    progressContainer.addEventListener('click', (e) => {
+        const rect = progressContainer.getBoundingClientRect();
+        const percent = (e.clientX - rect.left) / rect.width;
+        audio.currentTime = percent * audio.duration;
+    });
+    
+    // Загрузка метаданных трека
+    loadTrackMetadata();
+</script>
 
+<!-- Подключаем jsmediatags для чтения обложки из MP3 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
 </body>
 </html>
